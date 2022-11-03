@@ -4,10 +4,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
     mode: 'production',
-    entry: './src/js/index.js',
+    entry: {
+        main: './src/js/index.js',
+        learnwithviktor: './src/js/learnwithviktor.js'
+    },
     output: {
         path: path.resolve(__dirname, '../dist'),
-        filename: 'js/index.js'
+        filename: 'js/[name].[contenthash].bundle.js',
+        clean: true,
     },
     module: {
         rules: [
@@ -27,8 +31,15 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: 'src/template.html',
+            filename: 'main.html',
+            chunks: ['main'],
+            template: 'src/template.html'
+        }),
+        new HtmlWebpackPlugin({
+            filename: 'learnwithviktor.html',
+            chunks: ['learnwithviktor'],
+            template: 'src/template2.html',
         })
+
     ]
 }
