@@ -4,6 +4,7 @@ class LearnWithViktorButton {
     buttonCssClass = 'hello-world-button';
 
     render() {
+        console.log("HELLOOOOO")
         const button = document.createElement('button');
         const body = document.querySelector('body');
         button.innerHTML = 'Hello world';
@@ -18,4 +19,4 @@ class LearnWithViktorButton {
     }
 }
 
-export default HelloWorldButton;
+export default LearnWithViktorButton;
