@@ -1,10 +1,12 @@
+/*
+removes repeated styles and applies other css optimizations
+
+makes a small difference in our case but its good to have it
+*/
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
-const glob = require('glob')
-const { PurgeCSSPlugin } = require('purgecss-webpack-plugin')
-
 
 module.exports = {
     mode: 'production',
@@ -81,26 +83,14 @@ module.exports = {
                 },
                 generator: {
                     filename: './images/[name].[contenthash][ext]'
-                },
-                use: [
-                    {
-                        loader: 'image-webpack-loader',
-                        options: {
-                            mozjpeg: {
-                                quality: 40, // 100 is worst
-                            },
-                            pngquant: {
-                                quality: [0.65, 0.90], //min and max quality
-                                speed: 4 // speed of compression
-                            }
-                        }
-                    }
-                ]
+                }
             }
-
         ]
     },
     plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'css/[name].[contenthash].css'
+        }),
         new HtmlWebpackPlugin({
             filename: 'main.html',
             chunks: ['main'],
@@ -110,17 +100,6 @@ module.exports = {
             filename: 'learnwithviktor.html',
             chunks: ['learnwithviktor'],
             template: 'src/template2.html',
-        }),
-        new MiniCssExtractPlugin({
-            filename: 'css/[name].[contenthash].css'
-        }),
-        new PurgeCSSPlugin({
-            paths: glob.sync(
-                `${path.join(__dirname, '../src')}/**/*`,
-                { nodir: true }
-            )
-
         })
-
     ]
 }

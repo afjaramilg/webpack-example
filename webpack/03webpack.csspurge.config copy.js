@@ -1,10 +1,24 @@
+/*
+add PurgeCSS to get rid of unused css, particularly with frameworks like 
+bootstrap.
+
+point out you need to tell purgecss about your own css modules, cuz the
+
+css module config will scramble their names, so itll think they're not
+being used
+
+point out it is also possible to customize bootstrap to include what you need.
+I havent tested it but maybe a combination of both approaches could yield 
+results
+https://getbootstrap.com/docs/3.4/customize/
+*/
+
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 const glob = require('glob')
-const { PurgeCSSPlugin } = require('purgecss-webpack-plugin')
-
+const { PurgeCSSPlugin } =  require('purgecss-webpack-plugin')
 
 module.exports = {
     mode: 'production',
@@ -50,7 +64,7 @@ module.exports = {
             {
                 test: /\.css$/,
                 exclude: /\.module\.css$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader']
+                use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
             },
             {
                 test: /\.css$/,
@@ -69,7 +83,7 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+                use: [ MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader' ],
             },
             {
                 test: /\.(png|jpg|svg)$/,
@@ -81,26 +95,11 @@ module.exports = {
                 },
                 generator: {
                     filename: './images/[name].[contenthash][ext]'
-                },
-                use: [
-                    {
-                        loader: 'image-webpack-loader',
-                        options: {
-                            mozjpeg: {
-                                quality: 40, // 100 is worst
-                            },
-                            pngquant: {
-                                quality: [0.65, 0.90], //min and max quality
-                                speed: 4 // speed of compression
-                            }
-                        }
-                    }
-                ]
+                }
             }
-
         ]
     },
-    plugins: [
+    plugins: [        
         new HtmlWebpackPlugin({
             filename: 'main.html',
             chunks: ['main'],

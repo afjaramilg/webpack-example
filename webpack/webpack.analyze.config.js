@@ -5,7 +5,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 module.exports = merge(production, {
     plugins: [
         new BundleAnalyzerPlugin({
-            analyzerMode: 'server',
+            analyzerMode: 'static',
 			openAnalyzer: true,
         }),
     ]

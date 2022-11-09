@@ -1,10 +1,12 @@
+/*
+separate css styles into its own chunk using MiniCssExtractPlugin
+
+set the maximum size for images to be included as dataURLS
+*/
+
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
-const glob = require('glob')
-const { PurgeCSSPlugin } = require('purgecss-webpack-plugin')
-
 
 module.exports = {
     mode: 'production',
@@ -18,21 +20,6 @@ module.exports = {
         clean: true,
     },
     optimization: {
-        minimize: true,
-        minimizer: [
-            `...`,
-            new CssMinimizerPlugin({
-                minimizerOptions: {
-                    preset: [
-                        'default',
-                        {
-                            discardComments: { removeAll: true }
-                        }
-                    ]
-                }
-            })
-
-        ],
         splitChunks: {
             chunks: 'all'
         }
@@ -50,7 +37,7 @@ module.exports = {
             {
                 test: /\.css$/,
                 exclude: /\.module\.css$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader']
+                use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
             },
             {
                 test: /\.css$/,
@@ -69,7 +56,7 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+                use: [ MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader' ],
             },
             {
                 test: /\.(png|jpg|svg)$/,
@@ -81,26 +68,14 @@ module.exports = {
                 },
                 generator: {
                     filename: './images/[name].[contenthash][ext]'
-                },
-                use: [
-                    {
-                        loader: 'image-webpack-loader',
-                        options: {
-                            mozjpeg: {
-                                quality: 40, // 100 is worst
-                            },
-                            pngquant: {
-                                quality: [0.65, 0.90], //min and max quality
-                                speed: 4 // speed of compression
-                            }
-                        }
-                    }
-                ]
+                }
             }
-
         ]
     },
     plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'css/[name].[contenthash].css'
+        }),
         new HtmlWebpackPlugin({
             filename: 'main.html',
             chunks: ['main'],
@@ -110,16 +85,6 @@ module.exports = {
             filename: 'learnwithviktor.html',
             chunks: ['learnwithviktor'],
             template: 'src/template2.html',
-        }),
-        new MiniCssExtractPlugin({
-            filename: 'css/[name].[contenthash].css'
-        }),
-        new PurgeCSSPlugin({
-            paths: glob.sync(
-                `${path.join(__dirname, '../src')}/**/*`,
-                { nodir: true }
-            )
-
         })
 
     ]
